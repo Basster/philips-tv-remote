@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Philips TV Remote</title>
+</head>
+<body>
+<form>
+    <label for="hostname">Hostname or IP-Adress of your Philips-TV</label>
+    <input type="text" name="hostname" id="hostname" value="philips-tv" placeholder="Hostname or IP-Adress" />
+</form>
+<script src="js/jquery-1.8.1.min.js"></script>
+<script src="js/functions.js"></script>
+<script>
+    $(document).ready(function(){
+        queryChannelName();
+    });
+</script>
+</body>
+</html>
