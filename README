@@ -1,1 +1,12 @@
-This file was created by JetBrains PhpStorm 5.0.1 for binding GitHub repository
+This is a client side web interface for TV devices supporting the JointSpace API.
+
+References
+----------
+JointSpace:
+http://jointspace.sourceforge.net
+
+JointSpace API:
+http://jointspace.sourceforge.net/projectdata/documentation/jasonApi/1/doc/API.html
+
+Events in JavaScript:
+http://www.nczonline.net/blog/2010/03/09/custom-events-in-javascript/

@@ -2,13 +2,17 @@
 <html>
 <head>
     <title>Philips TV Remote</title>
+    <link rel="stylesheet" href="css/styles.css" type="text/css" />
 </head>
 <body>
 <form>
     <label for="hostname">Hostname or IP-Adress of your Philips-TV</label>
     <input type="text" name="hostname" id="hostname" value="philips-tv" placeholder="Hostname or IP-Adress" />
 </form>
+<div id="ajax_loader" class="ajax_loader"></div>
+<div class="tv_status" id="tv_status_display"></div>
 <script src="js/jquery-1.8.1.min.js"></script>
+<script src="js/EventTarget.js"></script>
 <script src="js/PhilipsTv.js"></script>
 <script src="js/functions.js"></script>
 </body>

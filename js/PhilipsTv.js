@@ -7,16 +7,28 @@
  */
 
 function PhilipsTv(host) {
+
+    EventTarget.call(this);
+
     this.port = 1925;
     this.hostName = host;
     this.connected = false;
-    this.resetSystemInfos();
+    this.systemInfos = null;
+
     this.commands = [
         { name: 'get_ambilight_topology', method: 'GET', queryString: 'ambilight/topology'},
         { name: 'get_ambilight_mode', method: 'GET', queryString: 'ambilight/mode'},
         { name: 'post_ambilight_mode', method: 'POST', queryString: 'ambilight/mode'}
     ];
+
+    this.pollTimer = 1000;
+    var instance = this;
+
+    this.connectionInterval = window.setInterval(function() { instance.updateSystemInfo() }, this.pollTimer);
 }
+
+PhilipsTv.prototype = new EventTarget();
+PhilipsTv.prototype.constructor = PhilipsTv;
 
 PhilipsTv.prototype.getCommand = function(commandName) {
 
@@ -34,7 +46,8 @@ PhilipsTv.prototype.getBaseUrl = function() {
 }
 
 PhilipsTv.prototype.updateSystemInfo = function() {
-    var url = this.getBaseUrl() + 'system' ;
+    var url = this.getBaseUrl() + 'system';
+    var instance = this;
 
     $.ajax({
         url: url,
@@ -43,22 +56,23 @@ PhilipsTv.prototype.updateSystemInfo = function() {
             console.log(data);
 
             // set connected status
-            this.connected = true;
+            instance.connected = true;
 
             // set device attributes
-            this.name = data.name;
-            this.model = data.model;
-            this.serialNumber = data.serialnumber
+            instance.systemInfos = data;
 
+            window.clearInterval(instance.connectionInterval);
+            instance.connectionInterval = null;
+
+            instance.fire('CONNECTION_SUCCESS');
         },
         error: function (data) {
-            this.connected = false;
+            instance.connected = false;
+            instance.fire('CONNECTION_LOST');
         }
     });
 }
 
 PhilipsTv.prototype.resetSystemInfos = function() {
-    this.name = "";
-    this.serialNumber = "";
-    this.model = "";
+    this.systemInfos = null;
 }
