@@ -6,28 +6,49 @@
  * To change this template use File | Settings | File Templates.
  */
 
-var port = 1925;
+var tv = null;
+var checkInterval = null;
+var errCount = 0;
 
-function getHostName() {
-    return $('#hostname').val();
+$(document).ready(function(){
+    updateTV();
+});
+
+function updateTvHost() {
+    tv = new PhilipsTv($('#hostname').val());
+    // console.log(tv.getCommand('get_ambilight_topology'));
 }
 
-function getTVHost() {
-    return 'http://' + getHostName() + ':' + port;
+function updateTV() {
+    updateTvHost();
+    resetInterval();
+    checkInterval = window.setInterval('checkTVConnection()', 5000);
 }
 
-function queryChannelName() {
+function resetInterval() {
+    console.log('reset Interval');
 
-    var curl = getTVHost() + '/1/channels' ;
+    if (checkInterval !== null) {
+        window.clearInterval(checkInterval);
+        checkInterval = null;
+    }
+}
 
-    $.ajax({
-        url: curl,
-        dataType: 'json',
-        success: function(data) {
-            console.log(data);
-        },
-        error: function (data) {
-            console.log(data);
+function checkTVConnection() {
+    console.log(errCount);
+    if (tv.connected === true) {
+        console.log('TV: ' + tv.name + " is connected!");
+        errCount = 0;
+    }
+    else {
+        console.log('No TV connected, try to get new system info');
+        errCount++;
+        if (errCount < 10) {
+            tv.updateSystemInfo();
         }
-    });
+        else {
+            resetInterval();
+        }
+    }
+
 }
