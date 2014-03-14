@@ -1,1 +1,3 @@
-.idea/*
+.idea/
+.grunt/
+node_modules/
